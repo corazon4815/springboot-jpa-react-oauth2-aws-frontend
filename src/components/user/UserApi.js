@@ -1,10 +1,10 @@
 import axios from "axios";
 import {API_BASE_URL} from "../../api-config";
 
-export const todo = {
+export const user = {
 
-    reqPostTodo: function (params) {
-        return axios.post("/todo", params)
+    signIn: function (params) {
+        return axios.post("/auth/login", params)
             .then((res) => {
                 return res.data;
             })
@@ -13,8 +13,8 @@ export const todo = {
             });
     },
 
-    reqPutTodo: function (params) {
-        return axios.put("/todo", params)
+    signUp: function (params) {
+        return axios.post("/auth/signup", params)
             .then((res) => {
                 return res.data;
             })
@@ -23,8 +23,8 @@ export const todo = {
             });
     },
 
-    reqDeleteTodo: function (todo) {
-        return axios.delete(`/todo/${todo.id}`)
+    recreateToken: function () {
+        return axios.post("/auth/recreate")
             .then((res) => {
                 return res.data;
             })
@@ -33,8 +33,8 @@ export const todo = {
             });
     },
 
-    reqGetTodoList: function () {
-        return axios.get( "/todo")
+    signOut: function () {
+        return axios.post("/auth/recreate")
             .then((res) => {
                 return res.data;
             })
@@ -42,5 +42,4 @@ export const todo = {
                 return err.response.data.message;
             });
     },
-
 }

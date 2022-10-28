@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect, useCallback} from "react";
 import {
     Container,
     List,
@@ -10,45 +10,73 @@ import {
     Toolbar,
     Typography,
 } from "@mui/material";
-import {call, signOut} from "./service/ApiService";
 import AddTodo from "./components/todo/AddTodo";
 import Todo from "./components/todo/Todo";
 import {useNavigate} from "react-router-dom";
+import ApiService from "./service/ApiService";
 
 function App() {
-    const [items, setItems] = useState([]);
+    const [items, setItems] = useState(null);
     const [loading, setLoading] = useState(true);
 
     let navigate = useNavigate();
 
     useEffect(() => {
-        call("/todo", "GET", null).then((response) => {
-            if(response.code === 1) {
-                setItems(response.data);
-            }else{
-                console.log("서버에 문제가 발생했습니다.")
-            }
-            setLoading(false);
-        });
+        reqGetTodoList();
     }, []);
 
     const addItem = (item) => {
-        call("/todo", "POST", item)
-            .then((response) => setItems(response.data));
+        reqPostTodo(item);
     };
 
     const editItem = (item) => {
-        call("/todo", "PUT", item)
-            .then((response) => setItems(response.data));
+        reqPutTodo(item);
     };
 
-    const deleteItem = (item) => {
-        call("/todo", "DELETE", item)
-            .then((response) => setItems(response.data));
+    const deleteItem = (todo) => {
+        reqDeleteTodo(todo);
     };
 
-    let todoItems = items.length > 0 && (
-        <Paper style={{ margin: 16 }}>
+    const reqPostTodo = async (params) => {
+        const result = await ApiService.todo.reqPostTodo(params);
+        if(result.data === 1) {
+            reqGetTodoList();
+        } else{
+            alert("서버오류")
+        }
+    };
+
+    const reqPutTodo = async (params) => {
+        const result = await ApiService.todo.reqPutTodo(params);
+        if(result.code === 1) {
+            reqGetTodoList();
+        } else{
+            alert("서버오류")
+        }
+    };
+
+    const reqDeleteTodo = async (todo) => {
+        const result = await ApiService.todo.reqDeleteTodo(todo);
+        if(result.code === 1) {
+            reqGetTodoList();
+        } else{
+            alert("서버오류")
+        }
+    };
+
+    const reqGetTodoList = async () => {
+        const result = await ApiService.todo.reqGetTodoList();
+        if(result.code === 1) {
+            console.log(result);
+            setItems(result.data);
+        } else{
+            alert("서버오류")
+        }
+        setLoading(false);
+    };
+
+    let todoItems = items && (
+        <Paper style={{margin: 16}}>
             <List>
                 {items.map((item) => (
                     <Todo
@@ -71,7 +99,7 @@ function App() {
                         <Typography variant="h6">오늘의 할일</Typography>
                     </Grid>
                     <Grid item>
-                        <Button color="inherit" raised onClick={signOut}>
+                        <Button color="inherit" raised>
                             로그아웃
                         </Button>
                     </Grid>
@@ -85,7 +113,7 @@ function App() {
         <div>
             {navigationBar} {/* 네비게이션 바 렌더링 */}
             <Container maxWidth="md">
-                <AddTodo addItem={addItem} />
+                <AddTodo addItem={addItem}/>
                 <div className="TodoList">{todoItems}</div>
             </Container>
         </div>

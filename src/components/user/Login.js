@@ -7,7 +7,7 @@ import {
     Button
 } from "@mui/material";
 import {Link, useNavigate} from "react-router-dom";
-import {signIn} from "../../service/ApiService";
+import ApiService from "../../service/ApiService";
 
 function Login() {
 
@@ -22,13 +22,17 @@ function Login() {
             password: data.get("password"),
         }
 
-        signIn(params).then(
-            (response) => {
-                if (response.code === 1) {
-                    goTodo();
-                }
-            }
-        );
+        signIn(params);
+
+    };
+
+    const signIn = async (params) => {
+        const result = await ApiService.user.signIn(params);
+        if(result.code === 1) {
+            goTodo();
+        } else{
+            alert("서버오류")
+        }
     };
 
     const goTodo = () => {

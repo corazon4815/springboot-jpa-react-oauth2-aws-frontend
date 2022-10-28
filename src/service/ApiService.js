@@ -1,54 +1,47 @@
-import {API_BASE_URL} from "../api-config";
+import axios from "axios";
+import {todo} from "../components/todo/TodoApi";
+import {user} from "../components/user/UserApi";
 
-export function call(api, method, request) {
-    let headers = new Headers({
-        "Content-Type": "application/json",
-    });
+axios.defaults.withCredentials = true;
+axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8';
+axios.defaults.headers['Access-Control-Allow-Origin'] = '*';
+axios.defaults.timeout = 10000;
 
-    let options = {
-        headers: headers,
-        url: API_BASE_URL + api,
-        method: method,
-        credentials: 'include', //쿠키 전달을 위해
-    };
-    if (request) {
-        // GET method
-        options.body = JSON.stringify(request);
+axios.interceptors.request.use(function (config) {
+    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+    return config;
+}, function (error) {
+    return Promise.reject(error);
+});
+
+axios.interceptors.response.use(function (response) {
+    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@111")
+    const {data, headers} = response;
+
+
+    if (data.code === 401) {
     }
-    return fetch(options.url, options).then((response) => {
-        if (response.status === 200) {
-            return response.json();
-        } else if (response.status === 403) {
-            return response;
-        } else {
-            new Error(response);
-        }
-    }).catch((error) => {
-        console.log("http error");
-        console.log(error);
+    /* switch (data.code) {
+         case 400:
+             break;
+         case 401:
+             sessionStorage.removeItem("session");
+             sessionStorage.removeItem("token");
+             break;
+     }*/
+
+    return response;
+}, function (error) {
+
+    setTimeout(() => {
+        return Promise.reject(error);
     });
-}
 
-/*
- * 로그인
- */
-export function signIn(userDTO) {
-    return call("/auth/login", "POST", userDTO)
-        .then((response) => {
-            return response;
-        });
-}
+    // 응답 에러 시에도 로딩 끄기
+    //return Promise.reject(error);
+});
 
-/*
- * 회원가입
- */
-export function signUp(userDTO) {
-    return call("/auth/signup", "POST", userDTO);
-}
-
-/*
- * 로그아웃
- */
-export function signOut() {
-
-}
+export default {
+    todo,
+    user,
+};

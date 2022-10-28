@@ -1,7 +1,7 @@
 import React from "react";
 import {Container, Grid, Typography, TextField, Button} from "@mui/material";
 import {Link, useNavigate} from "react-router-dom";
-import {signUp} from "../../service/ApiService";
+import ApiService from "../../service/ApiService";
 
 function SignUp() {
 
@@ -16,11 +16,11 @@ function SignUp() {
             password: data.get("password"),
             username: data.get("username"),
         }
-        signUp(params).then(
-            (response) => {
-                goLogin();
-            }
-        );
+        signUp(params).then(r => console.log(r));
+    };
+
+    const signUp = async (params) => {
+        await ApiService.user.signUp(params);
     };
 
     const goLogin = () => {
