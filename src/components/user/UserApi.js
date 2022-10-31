@@ -34,7 +34,7 @@ export const user = {
     },
 
     signOut: function () {
-        return axios.post("/auth/recreate")
+        return axios.post("/auth/logout")
             .then((res) => {
                 return res.data;
             })
