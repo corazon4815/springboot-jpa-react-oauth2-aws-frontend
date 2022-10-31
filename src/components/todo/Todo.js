@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import {
     ListItem,
     ListItemText,
@@ -42,32 +42,40 @@ const Todo = (props) => {
     };
 
     return (
-        <ListItem>
-            <Checkbox checked={item.done}
-                      onChange={checkboxEventHandler} />
-            <ListItemText>
-                <InputBase
-                    inputProps={{
-                        "aria-label": "naked",
-                        readOnly: readOnly }}
-                    onClick={turnOffReadOnly}
-                    onKeyDown={turnOnReadOnly}
-                    onChange={editEventHandler}
-                    type="text"
-                    id={item.id}
-                    name={item.id}
-                    value={item.title}
-                    multiline={true}
-                    fullWidth={true}
-                />
-            </ListItemText>
-            <ListItemSecondaryAction>
-                <IconButton aria-label="Delete Todo"
-                            onClick={deleteEventHandler} >
-                    <DeleteOutlined />
-                </IconButton>
-            </ListItemSecondaryAction>
-        </ListItem>
+        <React.Fragment>
+            {
+                deleteItem && editItem ?
+                    <ListItem>
+                        <Checkbox checked={item.done}
+                                  onChange={checkboxEventHandler}/>
+                        <ListItemText>
+                            <InputBase
+                                inputProps={{
+                                    "aria-label": "naked",
+                                    readOnly: readOnly
+                                }}
+                                onClick={turnOffReadOnly}
+                                onKeyDown={turnOnReadOnly}
+                                onChange={editEventHandler}
+                                type="text"
+                                id={item.id}
+                                name={item.id}
+                                value={item.title}
+                                multiline={true}
+                                fullWidth={true}
+                            />
+                        </ListItemText>
+                        <ListItemSecondaryAction>
+                            <IconButton aria-label="Delete Todo"
+                                        onClick={deleteEventHandler}>
+                                <DeleteOutlined/>
+                            </IconButton>
+                        </ListItemSecondaryAction>
+                    </ListItem>
+                    : null
+            }
+        </React.Fragment>
+
     );
 };
 

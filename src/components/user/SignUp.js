@@ -16,11 +16,16 @@ function SignUp() {
             password: data.get("password"),
             username: data.get("username"),
         }
-        signUp(params).then(r => console.log(r));
+        signUp(params);
     };
 
     const signUp = async (params) => {
-        await ApiService.user.signUp(params);
+        const result = await ApiService.user.signUp(params);
+        if(result.code === 1) {
+            goLogin();
+        } else{
+            alert("서버오류")
+        }
     };
 
     const goLogin = () => {

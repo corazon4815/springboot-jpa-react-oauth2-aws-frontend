@@ -36,7 +36,7 @@ function Login() {
     };
 
     const goTodo = () => {
-        navigate('/todo');
+        navigate('/todos');
     };
 
     return (
@@ -80,7 +80,7 @@ function Login() {
                         </Button>
                     </Grid>
                     <Grid item>
-                        <Link to="/signup" variant="body2">
+                        <Link to="/join" variant="body2">
                             계정이 없습니까?
                         </Link>
                     </Grid>
