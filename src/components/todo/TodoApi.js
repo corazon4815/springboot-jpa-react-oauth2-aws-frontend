@@ -4,7 +4,7 @@ import {API_BASE_URL} from "../../api-config";
 export const todo = {
 
     reqPostTodo: function (params) {
-        return axios.post("/todo", params)
+        return axios.post("/api/todo", params)
             .then((res) => {
                 return res.data;
             })
@@ -14,7 +14,7 @@ export const todo = {
     },
 
     reqPutTodo: function (params) {
-        return axios.put("/todo", params)
+        return axios.put("/api/todo", params)
             .then((res) => {
                 return res.data;
             })
@@ -24,7 +24,7 @@ export const todo = {
     },
 
     reqDeleteTodo: function (todo) {
-        return axios.delete(`/todo/${todo.id}`)
+        return axios.delete(`/api/todo/${todo.id}`)
             .then((res) => {
                 return res.data;
             })
@@ -34,7 +34,7 @@ export const todo = {
     },
 
     reqGetTodoList: function () {
-        return axios.get( "/todo")
+        return axios.get( "/api/todo")
             .then((res) => {
                 return res.data;
             })

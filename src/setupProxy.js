@@ -7,7 +7,7 @@ module.exports = function(app) {
             changeOrigin: true,
         })
     );
-    app.use('/todo',
+    app.use('/api',
         createProxyMiddleware({
             target: 'http://localhost:8111',
             changeOrigin: true,
